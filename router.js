@@ -4,7 +4,6 @@ const router = express.Router();
 const User = require("./model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const valid = require("./index2");
 const { body, validationResult } = require("express-validator");
 //create user using Username,email,password
 router.post("/createuser", [
@@ -26,28 +25,22 @@ router.post("/createuser", [
         //hash the password
         const salt = await bcrypt.genSalt(10);
         const secPass = await bcrypt.hash(req.body.password, salt);
-        //check email is valid or not
-        const validEmail = await valid(req.body.email);
-        if (!validEmail) {
-            return res.status(400).json({ success, error: "Sorry this email is not valid" });
-        }
-        else {
 
-            //create a new user
-            const user = await User.create({
-                username: req.body.username,
-                email: req.body.email,
-                password: secPass,
-            });
-            const data = {
-                user: {
-                    id: user._id,
-                }
+        //create a new user
+        const user = await User.create({
+            username: req.body.username,
+            email: req.body.email,
+            password: secPass,
+        });
+        const data = {
+            user: {
+                id: user._id,
             }
-            const authToken = jwt.sign(data, process.env.WEBTOKEN);
-            success = true;
-            res.json({ success, authToken, user });
         }
+        const authToken = jwt.sign(data, process.env.WEBTOKEN);
+        success = true;
+        res.json({ success, authToken, user });
+
         //create a web token
     } catch (error) {
         console.error(error.message);
