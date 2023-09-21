@@ -133,7 +133,7 @@ router.post('/comment/:id', fetchuser, async (req, res) => {
             await like.save();
         }
         const newNote = {};
-        if (Comment) { newNote.Comment = Comment };
+        if (comment) { newNote.Comment = comment };
         like = await Like.findOneAndUpdate({ post: id, user: req.user.id }, { $set: newNote }, { new: true });
         res.json({ success: true, like: like });
     } catch (error) {
