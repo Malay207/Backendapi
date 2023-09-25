@@ -12,8 +12,8 @@ mongoose.connect(URL).then(() => {
 }).catch((err) => {
     console.log("Error:" + err)
 })
-app.use("/api/auth", require("./route/router"));
-app.use("/api/social", require('./route/Social'));
+app.use("/api/userauth", require("./route/router"));
+app.use("/api/socialposts", require('./route/Social'));
 app.listen(PORT, () => {
     console.log(`http://localhost:${PORT}`)
 })
